@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Devine un nombre</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+</head>
+<body>
+<h1 class="text-center display-5 mb-5">Guess the number</h1>
+<div class="container margin-auto border border-info mt-5">
+<p class="text-center">Devinez un nombre entre 1 et 100. Vous avez 5 coups.</p>
+<div class="row d-flex justify-content-center">
+<label class="pr-3" for="guessField">Devine le nombre: </label>
+<input type="text" id="guessField">
+</div>
+<div class="row d-flex justify-content-center">
+<input class="mt-4 btn btn-primary" id="buttonSubmit" type="submit" value="valider">
+</div>
+<div>
+    <p class="guesses"></p>
+    <p class="rightOrFalse"></p>
+    <p class="hint"></p>
+</div> 
+</div>
+<script>
+ // Etape 1 : Définir les variables pr stoker les données
+ // 1.a : Générer un random Number
+ let randomNumber = Math.floor(Math.random()*100)+1;
+ console.log(randomNumber);
+ // 1.b: Déclarer 3 variables qui vont stocker les références aux 3 paragraphes
+ let guesses = document.querySelector('.guesses');
+ let rightOrFalse = document.querySelector('.rightOrFalse');
+ let hint = document.querySelector('.hint');
+
+ // 1.c: Déclarer 2 variables pr stocker les ref, une pr l'input de saisi et une pr le bouton submit
+ let guessField = document.getElementById('guessField');
+ let button = document.getElementById('buttonSubmit');
+
+ // 1.d: 1var pr stocker le nombre de tentative
+ let guessCount = 1;
+ console.log(guessCount);
+
+ //Etape 2: Definir notre fonction principale.
+ // Elle sert à vérifier si la proposition du joueur est correct ou non. 
+ // Et on veut lui envoyer une réponse appropriée. 
+ // 2.a : déclarer une variable pour stocker le nombre proposé
+
+ function checkGuess(){
+     let playerGuess = Number(guessField.value); //méthode Number
+         // 2.b : Si le nbre de tentative (guesCount) est égale à 1, alors 
+        // on affiche notre 1er <p>. Cette étape n'aura dc lieu qu'une fois
+    if(guessCount === 1){
+        guesses.textContent = 'Propositions précédentes :'
+    }
+        //2.c: on incrémente guesses.textContent en y ajoutant la valeur de la dernière tentative, 
+        // du dernier playerGuess 
+        guesses.textContent += playerGuess + ' ';
+        // guesses.textContent = guesses.textContent + playerGuess
+
+        //2.d: Condition si joueur trouve la bonne réponse:
+        if (playerGuess === randomNumber){ 
+            rightOrFalse.textContent = "Bravooooooooo";
+            rightOrFalse.style.backgroundColor = "green";
+            setGameFinish();
+        }
+        //2.e: condition si le joueur a perdu
+        else if( guessCount === 5) {
+            rightOrFalse.textContent = "C'est perdu";
+            setGameFinish();
+        }
+        // 2.f : Condition si le joueur n'a pas gagné mais n'a pas encore perdu, on lui donne des conseils pour la tentative suivante
+        else {
+            rightOrFalse.textContent = "C'est faux... recommence";
+            rightOrFalse.style.backgroundColor = "red";
+            if (playerGuess < randomNumber){
+                hint.textContent = 'Indice: Le nombre saisi est trop petit';
+            } else if (playerGuess > randomNumber){
+                hint.textContent = 'Indice: Le nombre saisi est trop grand';
+            }
+        }
+        // 2.g: on incrémente guessCount de 1
+        // et on redonne  à guessField une empty string
+        guessCount++;
+        guessField.value = '';
+        guessField.focus();
+ }
+        //Etape 3: appeler la fonction checkGuess grave à un événement. On va utiliser la methode addEventListener.
+        // Cette méthode va prendre 2 arguments (parametres). Le 1er argument c'est l'événement écouté dc le click, le 2eme parametre -->
+        // c'est ce qui passe quand on a cliqué. JE CLIQUE --> ça lance la fonction checkGuess
+        buttonSubmit.addEventListener('click', checkGuess);
+
+ function setGameFinish(){
+     alert("Jeu Fini");
+     guessField.disabled = true;
+     buttonSubmit.disabled = true;
+ }
+
+</script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+</body>
+</html>
